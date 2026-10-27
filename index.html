@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>麦悠悠 · 10月冲锋看板</title>
+<style>
+:root{
+  --brand:#0D7A6F; --brand-mid:#16A394; --brand-soft:#E6F3F1;
+  --today:#D64545; --today-soft:#FCECEC;
+  --ink:#16232B; --ink2:#3C4E57; --sub:#6C7B82; --faint:#95A4AA;
+  --bg:#F4F7F6; --card:#FFFFFF; --line:#E3EBE9;
+  --radius:16px;
+  --shadow:0 1px 2px rgba(16,40,38,.04), 0 8px 24px -12px rgba(16,40,38,.12);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-font-smoothing:antialiased}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--ink); padding:28px 22px 60px; line-height:1.5;
+  font-variant-numeric:tabular-nums;
+}
+.wrap{max-width:1300px;margin:0 auto}
+
+/* ---------- header ---------- */
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:24px}
+.brand{display:flex;align-items:center;gap:14px}
+.logo{
+  width:46px;height:46px;border-radius:13px;flex:none;
+  background:linear-gradient(140deg,#0D7A6F,#16A394);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:20px;font-weight:700;letter-spacing:-1px;
+  box-shadow:0 6px 16px -6px rgba(13,122,111,.6);
+}
+h1{font-size:23px;font-weight:700;letter-spacing:-.3px}
+.sub{font-size:13px;color:var(--sub);margin-top:3px}
+.sub b{color:var(--brand);font-weight:600}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{
+  font-size:12px;padding:6px 12px;border-radius:999px;background:#fff;
+  border:1px solid var(--line);color:var(--ink2);display:flex;align-items:center;gap:6px;
+}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--brand-mid)}
+.dot.live{background:var(--today);box-shadow:0 0 0 3px var(--today-soft);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+/* ---------- kpi ---------- */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:14px}
+.kpi{
+  background:var(--card);border-radius:var(--radius);padding:20px 22px 18px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;
+}
+.kpi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--brand)}
+.kpi.t::before{background:var(--today)}
+.kpi .lab{font-size:12.5px;color:var(--sub);font-weight:500;display:flex;align-items:center;gap:7px}
+.kpi .lab .tag{font-size:10.5px;padding:1px 6px;border-radius:5px;background:var(--brand-soft);color:var(--brand);font-weight:600}
+.kpi.t .lab .tag{background:var(--today-soft);color:var(--today)}
+.kpi .val{font-size:30px;font-weight:700;letter-spacing:-1px;margin:9px 0 6px;line-height:1.1}
+.kpi .val small{font-size:14px;font-weight:600;color:var(--sub);margin-left:2px;letter-spacing:0}
+.kpi .foot{font-size:12px;color:var(--faint)}
+.kpi .foot b{color:var(--ink2);font-weight:600}
+.bar-mini{height:4px;border-radius:3px;background:#EEF3F2;margin-top:12px;overflow:hidden}
+.bar-mini i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,var(--brand),var(--brand-mid))}
+
+/* ---------- cards ---------- */
+.grid{display:grid;gap:14px;margin-bottom:14px}
+.g2{grid-template-columns:1fr 1fr}
+.card{background:var(--card);border-radius:var(--radius);padding:20px 22px;box-shadow:var(--shadow)}
+.card h2{font-size:14px;font-weight:650;letter-spacing:.1px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.card h2 .hint{font-size:11.5px;font-weight:400;color:var(--faint)}
+.card .note{font-size:11.5px;color:var(--faint);margin-top:2px;margin-bottom:14px}
+
+/* ---------- week bars ---------- */
+.weeks{display:flex;gap:10px;align-items:flex-end;height:190px;margin-top:18px;padding-top:6px}
+.wcol{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:0;position:relative}
+.wcol .amt{font-size:12.5px;font-weight:650;margin-bottom:6px;color:var(--ink)}
+.wcol .b{
+  width:100%;max-width:74px;border-radius:8px 8px 3px 3px;
+  background:linear-gradient(180deg,#16A394,#0D7A6F);
+  transition:.6s cubic-bezier(.2,.7,.3,1);position:relative;
+}
+.wcol.t .b{background:linear-gradient(180deg,#E96464,#D64545)}
+.wcol .b:hover{filter:brightness(1.06)}
+.wcol .cap{font-size:11.5px;color:var(--sub);margin-top:9px;text-align:center;white-space:nowrap}
+.wcol .cap em{display:block;font-size:10.5px;color:var(--faint);font-style:normal;margin-top:1px}
+
+/* ---------- trend ---------- */
+.trend{display:flex;align-items:flex-end;gap:3px;height:150px;margin-top:16px}
+.tb{flex:1;display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative;cursor:default}
+.tb i{display:block;width:100%;border-radius:3px 3px 1px 1px;background:#C9E2DE;transition:.4s}
+.tb:hover i{background:var(--brand-mid)}
+.tb.t i{background:var(--today)}
+.tb:hover::after{
+  content:attr(data-tip);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);
+  background:#16232B;color:#fff;font-size:11px;padding:4px 8px;border-radius:6px;white-space:nowrap;z-index:5;margin-bottom:4px;
+}
+.xaxis{display:flex;gap:3px;margin-top:7px}
+.xaxis span{flex:1;font-size:10px;color:var(--faint);text-align:center;overflow:hidden}
+
+/* ---------- rank ---------- */
+.ranks{margin-top:14px;display:flex;flex-direction:column;gap:11px}
+.rank{display:grid;grid-template-columns:118px 1fr 78px;align-items:center;gap:10px}
+.rank .nm{font-size:12.5px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank .track{height:20px;background:#F1F5F4;border-radius:5px;overflow:hidden;display:flex}
+.rank .track .m{background:linear-gradient(90deg,#0D7A6F,#16A394);height:100%}
+.rank .track .t{background:var(--today);height:100%}
+.rank .vv{font-size:12.5px;font-weight:650;text-align:right;white-space:nowrap}
+.rank .vv em{font-style:normal;font-size:10.5px;color:var(--today);margin-left:3px}
+.rank .nm .st{color:var(--faint);font-size:10.5px;margin-left:4px}
+
+/* ---------- table ---------- */
+.thead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.tabs{display:flex;gap:4px;background:#EFF4F3;padding:3px;border-radius:10px}
+.tabs button{
+  border:0;background:transparent;padding:7px 15px;border-radius:8px;font-size:12.5px;
+  color:var(--sub);cursor:pointer;font-weight:550;font-family:inherit;transition:.15s;
+}
+.tabs button.on{background:#fff;color:var(--brand);box-shadow:0 1px 3px rgba(16,40,38,.1)}
+.search{
+  border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 12px;font-size:12.5px;
+  width:190px;font-family:inherit;color:var(--ink);outline:none;
+}
+.search:focus{border-color:var(--brand-mid);box-shadow:0 0 0 3px rgba(22,163,148,.1)}
+.tw{overflow-x:auto;margin:0 -6px;padding:0 6px}
+table{width:100%;border-collapse:collapse;font-size:12.5px;min-width:840px}
+th{
+  text-align:left;font-weight:600;color:var(--sub);font-size:11.5px;padding:9px 10px;
+  border-bottom:1.5px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none;
+}
+th:hover{color:var(--brand)}
+th.r,td.r{text-align:right}
+th .ar{font-size:9px;margin-left:2px;color:var(--faint)}
+td{padding:9px 10px;border-bottom:1px solid #F0F4F3;color:var(--ink2)}
+tbody tr:hover td{background:#FAFCFB}
+td.nm{color:var(--ink);font-weight:520;white-space:nowrap}
+th:first-child{white-space:nowrap}
+td:nth-child(2),td:nth-child(3){white-space:nowrap}
+td.money{font-weight:600}
+td.money.z{color:#C3CFCC;font-weight:400}
+.pill{font-size:10.5px;padding:2px 7px;border-radius:6px;white-space:nowrap;font-weight:600}
+.pill.a{background:var(--today-soft);color:var(--today)}
+.pill.b{background:var(--brand-soft);color:var(--brand)}
+.pill.c{background:#EEF1F5;color:#7C8B94}
+.sumrow td{background:#F7FAF9;font-weight:700;color:var(--ink);border-bottom:0}
+.empty{padding:36px;text-align:center;color:var(--faint);font-size:13px}
+footer{margin-top:26px;font-size:11.5px;color:var(--faint);line-height:1.9}
+footer b{color:var(--sub);font-weight:600}
+
+/* ---- view switch ---- */
+.viewbar{display:flex;justify-content:center;margin:0 0 14px}
+.viewbar .tabs{background:#fff;border:1px solid var(--line);box-shadow:var(--shadow);padding:4px}
+.viewbar .tabs button{font-size:13px;padding:8px 20px}
+.viewbar .tabs button.on{background:var(--brand);color:#fff;box-shadow:none}
+.viewbar .tabs button[data-v="today"].on{background:var(--today)}
+.kpi.active{box-shadow:0 0 0 2px var(--brand) inset,var(--shadow)}
+.kpi.t.active{box-shadow:0 0 0 2px var(--today) inset,var(--shadow)}
+.hl{background:#EAF5F3 !important}
+td.hl{background:#EFF7F5 !important}
+tr.sumrow td.hl{background:#E3F0ED !important}
+
+@media(max-width:980px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .g2{grid-template-columns:1fr}
+  .kpi .val{font-size:25px}
+}
+@media(max-width:560px){
+  body{padding:18px 12px 40px}
+  h1{font-size:20px}
+  .rank{grid-template-columns:92px 1fr 70px;gap:8px}
+  .rank .vv em{display:block;font-size:9.5px;margin:0}
+  .kpi .foot{font-size:11px}
+  .wcol .cap{font-size:10px}
+  .wcol .amt{font-size:11px}
+  .card{padding:16px}
+  .kpi{padding:16px 16px 14px}
+  .kpi .val{font-size:22px}
+  .search{width:100%}
+  .thead{align-items:stretch;flex-direction:column}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="brand">
+    <div class="logo">麦</div>
+    <div>
+      <h1>10月冲锋看板</h1>
+      <div class="sub">麦悠悠 · 运营中台 &nbsp;|&nbsp; 本月已冲锋 <b id="hMonth">—</b> &nbsp;·&nbsp; 今日已冲锋 <b id="hToday">—</b></div>
+    </div>
+  </div>
+  <div class="chips">
+    <span class="chip"><span class="dot live"></span>实时 · 数据截止 <span id="hTime">—</span></span>
+    <span class="chip">口径：本月=周报实际冲锋 · 今日=每日表实付金额</span>
+  </div>
+</header>
+
+<div class="viewbar">
+  <div class="tabs" id="viewSeg">
+    <button data-v="all" class="on">全部视角</button>
+    <button data-v="month">本月已冲锋</button>
+    <button data-v="today">今日已冲锋</button>
+  </div>
+</div>
+
+<section class="kpis" id="kpis"></section>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>冲锋节奏 <span class="hint">按周</span></h2>
+    <div class="note">本月按周汇总的「实际冲锋」金额，最后一根为今日实时</div>
+    <div class="weeks" id="weeks"></div>
+  </div>
+  <div class="card">
+    <h2>10月日冲锋走势 <span class="hint">每日表 · 实付金额</span></h2>
+    <div class="note">红柱为今日；悬停查看当日金额与笔数</div>
+    <div class="trend" id="trend"></div>
+    <div class="xaxis" id="xaxis"></div>
+  </div>
+</div>
+
+<div class="grid g2">
+  <div class="card">
+    <h2>城市分布 <span class="hint"><span style="color:#0D7A6F">■</span> 本月 &nbsp;<span style="color:#D64545">■</span> 今日</span></h2>
+    <div class="note">按门店「所属城市」归属（基本面口径）</div>
+    <div class="ranks" id="cityRank"></div>
+  </div>
+  <div class="card">
+    <h2>督导排行 <span class="hint"><span style="color:#0D7A6F">■</span> 本月 &nbsp;<span style="color:#D64545">■</span> 今日</span></h2>
+    <div class="note">按门店「督导」归属（基本面口径），显示前 10</div>
+    <div class="ranks" id="supRank"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="thead">
+    <div class="tabs" id="tabs">
+      <button data-tab="store" class="on">门店汇总</button>
+      <button data-tab="today">今日明细</button>
+    </div>
+    <input class="search" id="q" placeholder="搜索门店 / 城市 / 督导">
+  </div>
+  <div class="tw"><table id="tbl"></table></div>
+</div>
+
+<footer>
+  <b>数据口径</b>：
+  ① 本月已冲锋 =《10月冲锋第一、二周统计》《10月第三周统计》《10月第四周统计》《10月第五周周一冲锋统计》四份周报「冲锋汇总」的「实际冲锋」字段合计（结算口径，不含今日）。
+  ② 今日已冲锋 = 《云店长…问题咨询-归档每日表》中 2026-10-27 当日「实付金额」合计（实时录入口径）。
+  ③ 门店「所属城市 / 督导」统一取自《麦悠悠门店信息基本面》，与周报自带片区不一致时以前者为准。
+  <br>
+  <b>说明</b>：两套口径来源不同，逐日实付金额合计与周报实际冲锋不完全相等；今日属第五周第 2 天，尚未进入周报结算。
+</footer>
+</div>
+
+<script>
+const D = {"meta":{"today":"2026-10-27","updated":"2026-10-27 17:18","base_total":219},"kpi":{"month_total":1096961.69,"month_stores":73,"month_rows":134,"today_total":111919.0,"today_stores":22,"today_rows":39,"month_daily_total":1174916.19},"week_series":[{"name":"第一、二周","amount":100815.1,"stores":17},{"name":"第三周","amount":523604.2,"stores":49},{"name":"第四周","amount":301203.29,"stores":40},{"name":"第五周","amount":171339.1,"stores":28,"sub":"10/26"},{"name":"今日","amount":111919.0,"stores":22,"sub":"10/27"}],"trend":[{"date":"2026-10-01","amount":9501.1,"cnt":5},{"date":"2026-10-02","amount":3098.0,"cnt":1},{"date":"2026-10-03","amount":6389.0,"cnt":7},{"date":"2026-10-05","amount":3105.0,"cnt":1},{"date":"2026-10-06","amount":6203.0,"cnt":2},{"date":"2026-10-07","amount":6868.6,"cnt":10},{"date":"2026-10-08","amount":3105.0,"cnt":1},{"date":"2026-10-09","amount":7942.0,"cnt":4},{"date":"2026-10-10","amount":25203.0,"cnt":12},{"date":"2026-10-11","amount":27880.1,"cnt":14},{"date":"2026-10-12","amount":19986.05,"cnt":9},{"date":"2026-10-13","amount":80672.2,"cnt":27},{"date":"2026-10-14","amount":134348.0,"cnt":51},{"date":"2026-10-15","amount":108300.32,"cnt":51},{"date":"2026-10-16","amount":71613.0,"cnt":30},{"date":"2026-10-17","amount":45676.33,"cnt":22},{"date":"2026-10-18","amount":40722.0,"cnt":19},{"date":"2026-10-19","amount":34780.0,"cnt":15},{"date":"2026-10-20","amount":13017.65,"cnt":6},{"date":"2026-10-21","amount":14898.0,"cnt":7},{"date":"2026-10-22","amount":9301.0,"cnt":3},{"date":"2026-10-23","amount":98624.0,"cnt":32},{"date":"2026-10-24","amount":95451.19,"cnt":34},{"date":"2026-10-25","amount":45306.55,"cnt":19},{"date":"2026-10-26","amount":151006.1,"cnt":52},{"date":"2026-10-27","amount":111919.0,"cnt":39}],"by_city":[{"name":"上海市","month":649048.86,"today":76156.0,"total":725204.86,"month_stores":54,"today_stores":16},{"name":"杭州市","month":233312.1,"today":23925.0,"total":257237.1,"month_stores":8,"today_stores":3},{"name":"长沙市","month":33131.0,"today":8853.0,"total":41984.0,"month_stores":4,"today_stores":2},{"name":"深圳市","month":181469.73,"today":2985.0,"total":184454.73,"month_stores":7,"today_stores":1}],"by_sup":[{"name":"上海五区-王帝豪","month":121881.67,"today":27326.0,"total":149207.67,"month_stores":13,"today_stores":6},{"name":"上海一区-牛晓东","month":157493.0,"today":28025.0,"total":185518.0,"month_stores":14,"today_stores":5},{"name":"上海六区-陈久永","month":83674.1,"today":11730.0,"total":95404.1,"month_stores":7,"today_stores":2},{"name":"上海四区-杨斌","month":241586.99,"today":5970.0,"total":247556.99,"month_stores":15,"today_stores":2},{"name":"自营-杨斌","month":22328.0,"today":0.0,"total":22328.0,"month_stores":2,"today_stores":0},{"name":"杭州-汤琇棋","month":233312.1,"today":23925.0,"total":257237.1,"month_stores":8,"today_stores":3},{"name":"城合-周观凤「长沙」","month":33131.0,"today":8853.0,"total":41984.0,"month_stores":4,"today_stores":2},{"name":"深圳一区-李进","month":181469.73,"today":2985.0,"total":184454.73,"month_stores":7,"today_stores":1},{"name":"自营-牛晓东","month":22085.1,"today":3105.0,"total":25190.1,"month_stores":3,"today_stores":1}],"stores":[{"store":"秀沿路店","city":"上海市","supervisor":"上海五区-王帝豪","month":19249.0,"today":0.0,"total":19249.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":9308.0,"today_cnt":0,"status":"本月已冲"},{"store":"松江大学城店","city":"上海市","supervisor":"上海一区-牛晓东","month":2985.0,"today":0.0,"total":2985.0,"w1":0.0,"w3":2985.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"博海路店","city":"上海市","supervisor":"上海六区-陈久永","month":9941.0,"today":0.0,"total":9941.0,"w1":986.0,"w3":8955.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"古宜路店","city":"上海市","supervisor":"上海四区-杨斌","month":19136.0,"today":0.0,"total":19136.0,"w1":0.0,"w3":9941.0,"w4":9195.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"上海春城店","city":"上海市","supervisor":"自营-杨斌","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"之俊大厦店","city":"上海市","supervisor":"上海四区-杨斌","month":19163.0,"today":0.0,"total":19163.0,"w1":0.0,"w3":9941.0,"w4":9222.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"夏威夷广场店","city":"上海市","supervisor":"上海四区-杨斌","month":16897.0,"today":0.0,"total":16897.0,"w1":0.0,"w3":8955.0,"w4":4957.0,"w5":2985.0,"today_cnt":0,"status":"本月已冲"},{"store":"下沙宝龙店","city":"杭州市","supervisor":"杭州-汤琇棋","month":5970.0,"today":8955.0,"total":14925.0,"w1":0.0,"w3":5970.0,"w4":0.0,"w5":0.0,"today_cnt":3,"status":"本月+今日"},{"store":"新国际博览汇店","city":"上海市","supervisor":"上海五区-王帝豪","month":9941.0,"today":8745.0,"total":18686.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":3,"status":"本月+今日"},{"store":"金平路店","city":"上海市","supervisor":"上海一区-牛晓东","month":21252.0,"today":0.0,"total":21252.0,"w1":0.0,"w3":8952.0,"w4":9195.0,"w5":3105.0,"today_cnt":0,"status":"本月已冲"},{"store":"新凯家园店","city":"上海市","supervisor":"上海一区-牛晓东","month":3985.0,"today":0.0,"total":3985.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":3985.0,"today_cnt":0,"status":"本月已冲"},{"store":"奥克斯万达广场店","city":"长沙市","supervisor":"城合-周观凤「长沙」","month":3000.0,"today":0.0,"total":3000.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":3000.0,"today_cnt":0,"status":"本月已冲"},{"store":"沙咀尚悦府店","city":"深圳市","supervisor":"深圳一区-李进","month":31207.0,"today":0.0,"total":31207.0,"w1":4125.0,"w3":11917.0,"w4":8955.0,"w5":6210.0,"today_cnt":0,"status":"本月已冲"},{"store":"青浦万达茂店","city":"上海市","supervisor":"自营-牛晓东","month":6090.0,"today":0.0,"total":6090.0,"w1":3105.0,"w3":0.0,"w4":2985.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"266新天地店","city":"上海市","supervisor":"上海六区-陈久永","month":0.0,"today":5970.0,"total":5970.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":0.0,"today_cnt":2,"status":"仅今日"},{"store":"八佰伴店","city":"上海市","supervisor":"上海六区-陈久永","month":8955.0,"today":0.0,"total":8955.0,"w1":0.0,"w3":8955.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"宝安华强广场店","city":"深圳市","supervisor":"深圳一区-李进","month":25971.0,"today":0.0,"total":25971.0,"w1":4117.0,"w3":8928.0,"w4":12926.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"星汇广场店","city":"上海市","supervisor":"上海一区-牛晓东","month":5993.0,"today":5993.0,"total":11986.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":5993.0,"today_cnt":2,"status":"本月+今日"},{"store":"东南华庭店","city":"上海市","supervisor":"上海六区-陈久永","month":19910.1,"today":0.0,"total":19910.1,"w1":0.0,"w3":9971.0,"w4":9939.1,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"九新公路店","city":"上海市","supervisor":"上海一区-牛晓东","month":3105.0,"today":3105.0,"total":6210.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":3105.0,"today_cnt":1,"status":"本月+今日"},{"store":"朱梅路地铁站店","city":"上海市","supervisor":"自营-杨斌","month":12387.0,"today":0.0,"total":12387.0,"w1":12387.0,"w3":0.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"福雷德艾肯金座店","city":"杭州市","supervisor":"杭州-汤琇棋","month":12180.0,"today":0.0,"total":12180.0,"w1":3105.0,"w3":8975.0,"w4":100.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"诺亚山林店","city":"长沙市","supervisor":"城合-周观凤「长沙」","month":0.0,"today":5865.0,"total":5865.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":0.0,"today_cnt":2,"status":"仅今日"},{"store":"港汇中心店","city":"杭州市","supervisor":"杭州-汤琇棋","month":38805.0,"today":0.0,"total":38805.0,"w1":0.0,"w3":38805.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"金泰广场店","city":"上海市","supervisor":"上海五区-王帝豪","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"宝安壹方城店","city":"深圳市","supervisor":"深圳一区-李进","month":15062.0,"today":0.0,"total":15062.0,"w1":5149.0,"w3":9913.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"青浦宝龙珑寓店","city":"上海市","supervisor":"自营-牛晓东","month":12890.1,"today":0.0,"total":12890.1,"w1":0.0,"w3":2985.0,"w4":6925.1,"w5":2980.0,"today_cnt":0,"status":"本月已冲"},{"store":"华鹏路地铁站店","city":"上海市","supervisor":"上海六区-陈久永","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":0.0,"w4":9941.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"前海科兴科学园店","city":"深圳市","supervisor":"深圳一区-李进","month":37115.0,"today":2985.0,"total":40100.0,"w1":12050.0,"w3":9914.0,"w4":8955.0,"w5":6196.0,"today_cnt":1,"status":"本月+今日"},{"store":"龙湖金沙天街店","city":"杭州市","supervisor":"杭州-汤琇棋","month":8955.0,"today":0.0,"total":8955.0,"w1":0.0,"w3":8955.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"江镇新都汇店","city":"上海市","supervisor":"上海四区-杨斌","month":9195.0,"today":0.0,"total":9195.0,"w1":0.0,"w3":0.0,"w4":2985.0,"w5":6210.0,"today_cnt":0,"status":"本月已冲"},{"store":"徐家汇地铁站店","city":"上海市","supervisor":"上海四区-杨斌","month":19995.0,"today":2985.0,"total":22980.0,"w1":0.0,"w3":9941.0,"w4":10054.0,"w5":0.0,"today_cnt":1,"status":"本月+今日"},{"store":"御桥九六广场店","city":"上海市","supervisor":"上海五区-王帝豪","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"中亚里店","city":"上海市","supervisor":"上海四区-杨斌","month":19128.89,"today":0.0,"total":19128.89,"w1":0.0,"w3":9941.0,"w4":6082.89,"w5":3105.0,"today_cnt":0,"status":"本月已冲"},{"store":"万丰海岸城店","city":"深圳市","supervisor":"深圳一区-李进","month":19005.43,"today":0.0,"total":19005.43,"w1":4123.0,"w3":11909.33,"w4":2973.1,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"王港店","city":"上海市","supervisor":"上海五区-王帝豪","month":9302.0,"today":0.0,"total":9302.0,"w1":0.0,"w3":0.0,"w4":9302.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"九亭中心店","city":"上海市","supervisor":"上海一区-牛晓东","month":6090.0,"today":2880.0,"total":8970.0,"w1":3105.0,"w3":0.0,"w4":2985.0,"w5":0.0,"today_cnt":1,"status":"本月+今日"},{"store":"柳湖路店","city":"上海市","supervisor":"上海四区-杨斌","month":19912.0,"today":0.0,"total":19912.0,"w1":0.0,"w3":9941.0,"w4":9971.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"惠南地铁站店","city":"上海市","supervisor":"上海四区-杨斌","month":20025.0,"today":0.0,"total":20025.0,"w1":0.0,"w3":9941.0,"w4":10084.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"浦江满天星广场店","city":"上海市","supervisor":"上海四区-杨斌","month":20005.0,"today":0.0,"total":20005.0,"w1":0.0,"w3":9941.0,"w4":10064.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"鑫都满天星店","city":"上海市","supervisor":"上海一区-牛晓东","month":15258.0,"today":0.0,"total":15258.0,"w1":0.0,"w3":2895.0,"w4":9258.0,"w5":3105.0,"today_cnt":0,"status":"本月已冲"},{"store":"麦多生活广场店","city":"上海市","supervisor":"上海四区-杨斌","month":9056.1,"today":2985.0,"total":12041.1,"w1":0.0,"w3":0.0,"w4":9056.1,"w5":0.0,"today_cnt":1,"status":"本月+今日"},{"store":"育秀路店","city":"上海市","supervisor":"上海六区-陈久永","month":19016.0,"today":0.0,"total":19016.0,"w1":0.0,"w3":9941.0,"w4":9075.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"中集美兰湖金地广场店","city":"上海市","supervisor":"上海五区-王帝豪","month":9315.0,"today":0.0,"total":9315.0,"w1":0.0,"w3":0.0,"w4":9315.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"英祥春天店","city":"长沙市","supervisor":"城合-周观凤「长沙」","month":5980.0,"today":2988.0,"total":8968.0,"w1":0.0,"w3":2985.0,"w4":0.0,"w5":2995.0,"today_cnt":1,"status":"本月+今日"},{"store":"青浦吾悦广场店","city":"上海市","supervisor":"自营-牛晓东","month":3105.0,"today":3105.0,"total":6210.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":3105.0,"today_cnt":1,"status":"本月+今日"},{"store":"玲珑府店","city":"杭州市","supervisor":"杭州-汤琇棋","month":21145.9,"today":0.0,"total":21145.9,"w1":2985.0,"w3":18160.9,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"九久青年城店","city":"上海市","supervisor":"上海一区-牛晓东","month":21135.0,"today":0.0,"total":21135.0,"w1":0.0,"w3":8955.0,"w4":5970.0,"w5":6210.0,"today_cnt":0,"status":"本月已冲"},{"store":"龙湖北城天街店","city":"上海市","supervisor":"上海五区-王帝豪","month":12912.67,"today":5865.0,"total":18777.67,"w1":0.0,"w3":9912.67,"w4":0.0,"w5":3000.0,"today_cnt":2,"status":"本月+今日"},{"store":"龙汇路店","city":"上海市","supervisor":"上海五区-王帝豪","month":9315.0,"today":0.0,"total":9315.0,"w1":0.0,"w3":0.0,"w4":9315.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"杨浦滨江店","city":"上海市","supervisor":"上海一区-牛晓东","month":2985.0,"today":0.0,"total":2985.0,"w1":0.0,"w3":0.0,"w4":2985.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"万象汇店","city":"杭州市","supervisor":"杭州-汤琇棋","month":60293.0,"today":0.0,"total":60293.0,"w1":0.0,"w3":60293.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"仓汇路店","city":"上海市","supervisor":"上海一区-牛晓东","month":5970.0,"today":0.0,"total":5970.0,"w1":0.0,"w3":2985.0,"w4":2985.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"汇锦里店","city":"上海市","supervisor":"上海一区-牛晓东","month":30324.0,"today":0.0,"total":30324.0,"w1":9189.0,"w3":11850.0,"w4":6180.0,"w5":3105.0,"today_cnt":0,"status":"本月已冲"},{"store":"苗圃路店","city":"上海市","supervisor":"上海五区-王帝豪","month":0.0,"today":2880.0,"total":2880.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":0.0,"today_cnt":1,"status":"仅今日"},{"store":"上海信息技术大厦店","city":"上海市","supervisor":"上海一区-牛晓东","month":13930.0,"today":9964.0,"total":23894.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":3989.0,"today_cnt":4,"status":"本月+今日"},{"store":"万科翡翠公园店","city":"上海市","supervisor":"上海五区-王帝豪","month":6083.0,"today":2985.0,"total":9068.0,"w1":0.0,"w3":0.0,"w4":6083.0,"w5":0.0,"today_cnt":1,"status":"本月+今日"},{"store":"泗泾大橘店","city":"上海市","supervisor":"上海一区-牛晓东","month":18398.0,"today":0.0,"total":18398.0,"w1":9315.0,"w3":0.0,"w4":6083.0,"w5":3000.0,"today_cnt":0,"status":"本月已冲"},{"store":"萧山开元广场店","city":"杭州市","supervisor":"杭州-汤琇棋","month":19656.0,"today":0.0,"total":19656.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":19656.0,"today_cnt":0,"status":"本月已冲"},{"store":"博兴路店","city":"上海市","supervisor":"上海五区-王帝豪","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":0.0,"w4":9941.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"庆滨路店","city":"上海市","supervisor":"上海六区-陈久永","month":0.0,"today":5760.0,"total":5760.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":0.0,"today_cnt":2,"status":"仅今日"},{"store":"东方现代广场店","city":"上海市","supervisor":"上海四区-杨斌","month":10061.0,"today":0.0,"total":10061.0,"w1":0.0,"w3":0.0,"w4":10061.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"运达锦绣广场店","city":"长沙市","supervisor":"城合-周观凤「长沙」","month":6000.0,"today":0.0,"total":6000.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":6000.0,"today_cnt":0,"status":"本月已冲"},{"store":"康士路店","city":"上海市","supervisor":"上海五区-王帝豪","month":3000.0,"today":2985.0,"total":5985.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":3000.0,"today_cnt":1,"status":"本月+今日"},{"store":"壹方天地店","city":"深圳市","supervisor":"深圳一区-李进","month":24959.0,"today":0.0,"total":24959.0,"w1":3105.0,"w3":9914.0,"w4":11940.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"康桥路店","city":"上海市","supervisor":"上海五区-王帝豪","month":3000.0,"today":3866.0,"total":6866.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":3000.0,"today_cnt":2,"status":"本月+今日"},{"store":"乐坊大华店","city":"上海市","supervisor":"上海四区-杨斌","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"紫金港剑桥公社店","city":"杭州市","supervisor":"杭州-汤琇棋","month":0.0,"today":2985.0,"total":2985.0,"w1":0.0,"w3":0.0,"w4":0.0,"w5":0.0,"today_cnt":1,"status":"仅今日"},{"store":"海汇街店","city":"上海市","supervisor":"上海六区-陈久永","month":5970.0,"today":0.0,"total":5970.0,"w1":0.0,"w3":2985.0,"w4":2985.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"河西王府井店","city":"长沙市","supervisor":"城合-周观凤「长沙」","month":18151.0,"today":0.0,"total":18151.0,"w1":8955.0,"w3":0.0,"w4":0.0,"w5":9196.0,"today_cnt":0,"status":"本月已冲"},{"store":"新松江路店","city":"上海市","supervisor":"上海一区-牛晓东","month":6083.0,"today":6083.0,"total":12166.0,"w1":0.0,"w3":2985.0,"w4":0.0,"w5":3098.0,"today_cnt":2,"status":"本月+今日"},{"store":"三邻桥店","city":"上海市","supervisor":"上海五区-王帝豪","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":2985.0,"w4":6956.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"天山店","city":"上海市","supervisor":"上海四区-杨斌","month":19882.0,"today":0.0,"total":19882.0,"w1":0.0,"w3":12926.0,"w4":6956.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"南汇大学城生活广场店","city":"上海市","supervisor":"上海四区-杨斌","month":19249.0,"today":0.0,"total":19249.0,"w1":0.0,"w3":9941.0,"w4":9308.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"海阳路二店","city":"上海市","supervisor":"上海六区-陈久永","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"大华第一坊店","city":"上海市","supervisor":"上海四区-杨斌","month":9941.0,"today":0.0,"total":9941.0,"w1":0.0,"w3":9941.0,"w4":0.0,"w5":0.0,"today_cnt":0,"status":"本月已冲"},{"store":"梅林卓悦汇店","city":"深圳市","supervisor":"深圳一区-李进","month":28150.3,"today":0.0,"total":28150.3,"w1":3074.1,"w3":9923.1,"w4":8955.0,"w5":6198.1,"today_cnt":0,"status":"本月已冲"},{"store":"河庄地铁站店","city":"杭州市","supervisor":"杭州-汤琇棋","month":66307.2,"today":11985.0,"total":78292.2,"w1":11940.0,"w3":17867.2,"w4":0.0,"w5":36500.0,"today_cnt":4,"status":"本月+今日"}],"today_items":[{"store":"河庄地铁站店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":2992.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"河庄地铁站店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":2993.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"河庄地铁站店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":3000.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"上海信息技术大厦店","city":"上海市","supervisor":"上海一区-牛晓东","amount":997.0,"platform":"美团","submiter":"","pianqu":"服务商-王烨镔「上海」"},{"store":"上海信息技术大厦店","city":"上海市","supervisor":"上海一区-牛晓东","amount":2992.0,"platform":"美团","submiter":"","pianqu":"服务商-王烨镔「上海」"},{"store":"星汇广场店","city":"上海市","supervisor":"上海一区-牛晓东","amount":2993.0,"platform":"美团","submiter":"","pianqu":"上海三区-范超"},{"store":"星汇广场店","city":"上海市","supervisor":"上海一区-牛晓东","amount":3000.0,"platform":"美团","submiter":"","pianqu":"上海三区-范超"},{"store":"新松江路店","city":"上海市","supervisor":"上海一区-牛晓东","amount":3098.0,"platform":"美团","submiter":"","pianqu":"上海一区-马静"},{"store":"九新公路店","city":"上海市","supervisor":"上海一区-牛晓东","amount":3105.0,"platform":"美团","submiter":"","pianqu":"上海六区-陈久永"},{"store":"青浦吾悦广场店","city":"上海市","supervisor":"自营-牛晓东","amount":3105.0,"platform":"美团","submiter":"","pianqu":"服务商-张道恒「苏州 上海 长沙」"},{"store":"河庄地铁站店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":3000.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"康桥路店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"苗圃路店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"九亭中心店","city":"上海市","supervisor":"上海一区-牛晓东","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海三区-范超"},{"store":"龙湖北城天街店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"新国际博览汇店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"新国际博览汇店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"庆滨路店","city":"上海市","supervisor":"上海六区-陈久永","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海三区-范超"},{"store":"诺亚山林店","city":"长沙市","supervisor":"城合-周观凤「长沙」","amount":2880.0,"platform":"美团","submiter":"","pianqu":"城合-周观凤「长沙」"},{"store":"庆滨路店","city":"上海市","supervisor":"上海六区-陈久永","amount":2880.0,"platform":"美团","submiter":"","pianqu":"上海三区-范超"},{"store":"新国际博览汇店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"康桥路店","city":"上海市","supervisor":"上海五区-王帝豪","amount":986.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"英祥春天店","city":"长沙市","supervisor":"城合-周观凤「长沙」","amount":2988.0,"platform":"美团","submiter":"","pianqu":"城合-周观凤「长沙」"},{"store":"麦多生活广场店","city":"上海市","supervisor":"上海四区-杨斌","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海四区-杨斌"},{"store":"新松江路店","city":"上海市","supervisor":"上海一区-牛晓东","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海一区-马静"},{"store":"266新天地店","city":"上海市","supervisor":"上海六区-陈久永","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"266新天地店","city":"上海市","supervisor":"上海六区-陈久永","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"上海信息技术大厦店","city":"上海市","supervisor":"上海一区-牛晓东","amount":2985.0,"platform":"美团","submiter":"","pianqu":"服务商-王烨镔「上海」"},{"store":"上海信息技术大厦店","city":"上海市","supervisor":"上海一区-牛晓东","amount":2990.0,"platform":"美团","submiter":"","pianqu":"服务商-王烨镔「上海」"},{"store":"龙湖北城天街店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"诺亚山林店","city":"长沙市","supervisor":"城合-周观凤「长沙」","amount":2985.0,"platform":"美团","submiter":"","pianqu":"城合-周观凤「长沙」"},{"store":"万科翡翠公园店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"紫金港剑桥公社店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":2985.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"徐家汇地铁站店","city":"上海市","supervisor":"上海四区-杨斌","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海四区-杨斌"},{"store":"康士路店","city":"上海市","supervisor":"上海五区-王帝豪","amount":2985.0,"platform":"美团","submiter":"","pianqu":"上海五区-王帝豪"},{"store":"前海科兴科学园店","city":"深圳市","supervisor":"深圳一区-李进","amount":2985.0,"platform":"美团","submiter":"","pianqu":"深圳一区-牛晓东"},{"store":"下沙宝龙店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":2985.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"下沙宝龙店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":2985.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"},{"store":"下沙宝龙店","city":"杭州市","supervisor":"杭州-汤琇棋","amount":2985.0,"platform":"美团","submiter":"","pianqu":"杭州-汤琇棋"}]};
+
+const fmt = n => '¥' + Math.round(n).toLocaleString('zh-CN');
+const wan = n => n>=10000 ? (n/10000).toFixed(2)+'万' : Math.round(n).toLocaleString('zh-CN');
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+document.getElementById('hMonth').textContent = fmt(D.kpi.month_total);
+document.getElementById('hToday').textContent = fmt(D.kpi.today_total);
+document.getElementById('hTime').textContent = D.meta.updated;
+
+/* ---- KPI ---- */
+const K = D.kpi;
+const coverPct = (K.month_stores / D.meta.base_total * 100);
+const todayShare = (K.today_total / K.month_total * 100);
+const avgPerStore = K.month_total / K.month_stores;
+document.getElementById('kpis').innerHTML = `
+ <div class="kpi">
+   <div class="lab">本月已冲锋 <span class="tag">W1–W5</span></div>
+   <div class="val">${fmt(K.month_total)}</div>
+   <div class="foot">已结算 <b>${K.month_rows}</b> 个门店周次 · 周均 <b>${wan(K.month_total/5)}</b></div>
+ </div>
+ <div class="kpi">
+   <div class="lab">本月冲锋门店 <span class="tag">覆盖</span></div>
+   <div class="val">${K.month_stores}<small>家</small></div>
+   <div class="foot">在营门店 <b>${D.meta.base_total}</b> 家 · 覆盖率 <b>${coverPct.toFixed(1)}%</b></div>
+   <div class="bar-mini"><i style="width:${coverPct.toFixed(1)}%"></i></div>
+ </div>
+ <div class="kpi t">
+   <div class="lab">今日已冲锋 <span class="tag">10-27</span></div>
+   <div class="val" style="color:var(--today)">${fmt(K.today_total)}</div>
+   <div class="foot">实时录入 <b>${K.today_rows}</b> 笔 · 占本月 <b>${todayShare.toFixed(1)}%</b></div>
+ </div>
+ <div class="kpi t">
+   <div class="lab">今日冲锋门店 <span class="tag">当日</span></div>
+   <div class="val" style="color:var(--today)">${K.today_stores}<small>家</small></div>
+   <div class="foot">场均 <b>${fmt(K.today_total/K.today_stores)}</b> · 本月场均 <b>${fmt(avgPerStore)}</b></div>
+ </div>`;
+
+/* ---- 周节奏 ---- */
+const ws = D.week_series, wmax = Math.max(...ws.map(x=>x.amount));
+document.getElementById('weeks').innerHTML = ws.map((w,i)=>`
+  <div class="wcol ${i===ws.length-1?'t':''}">
+    <div class="amt">${wan(w.amount)}</div>
+    <div class="b" style="height:${Math.max(w.amount/wmax*100,3)}%"></div>
+    <div class="cap">${w.name}${w.sub ? `<em>${w.sub}</em>` : ''}<em>${w.stores}家</em></div>
+  </div>`).join('');
+
+/* ---- 日趋势 ---- */
+const tr = D.trend, tmax = Math.max(...tr.map(x=>x.amount)), last = tr.length-1;
+document.getElementById('trend').innerHTML = tr.map((t,i)=>`
+  <div class="tb ${i===last?'t':''}" data-tip="${t.date.slice(5)} · ${fmt(t.amount)} · ${t.cnt}笔">
+    <i style="height:${Math.max(t.amount/tmax*100,2)}%"></i>
+  </div>`).join('');
+document.getElementById('xaxis').innerHTML = tr.map((t,i)=>{
+  const dd = +t.date.slice(8);
+  return `<span>${(i===0||i===last||dd%5===0) ? dd : ''}</span>`;
+}).join('');
+
+/* ---- 排行榜 ---- */
+let view = 'all';
+function rank(el, data, top){
+  let list = data.slice(0, top||99);
+  if(view==='month') list = list.filter(x=>x.month>0).sort((a,b)=>b.month-a.month);
+  else if(view==='today') list = list.filter(x=>x.today>0).sort((a,b)=>b.today-a.today);
+  let html;
+  if(view==='month'){
+    const mx = Math.max(...list.map(x=>x.month));
+    html = list.map(x=>`
+      <div class="rank">
+        <div class="nm" title="${esc(x.name)}">${esc(x.name)}<span class="st">${x.month_stores}家</span></div>
+        <div class="track"><div class="m" style="width:${x.month/mx*100}%"></div></div>
+        <div class="vv">${wan(x.month)}</div>
+      </div>`).join('');
+  } else if(view==='today'){
+    const mx = Math.max(...list.map(x=>x.today));
+    html = list.map(x=>`
+      <div class="rank">
+        <div class="nm" title="${esc(x.name)}">${esc(x.name)}<span class="st">${x.today_stores}家</span></div>
+        <div class="track"><div class="t" style="width:${x.today/mx*100}%"></div></div>
+        <div class="vv" style="color:var(--today)">${wan(x.today)}</div>
+      </div>`).join('');
+  } else {
+    const mx = Math.max(...list.map(x=>x.total));
+    html = list.map(x=>`
+      <div class="rank">
+        <div class="nm" title="${esc(x.name)}">${esc(x.name)}<span class="st">${x.month_stores||x.today_stores}家</span></div>
+        <div class="track">
+          <div class="m" style="width:${x.month/mx*100}%"></div>
+          <div class="t" style="width:${x.today/mx*100}%"></div>
+        </div>
+        <div class="vv">${wan(x.total)}${x.today>0?`<em>+${wan(x.today)}</em>`:''}</div>
+      </div>`).join('');
+  }
+  el.innerHTML = html;
+}
+function renderRank(){
+  rank(document.getElementById('cityRank'), D.by_city);
+  rank(document.getElementById('supRank'), D.by_sup, 10);
+}
+renderRank();
+
+/* ---- 表格 ---- */
+let tab='store', q='', sortKey='total', sortDir=-1;
+const S = D.stores, T = D.today_items;
+const tb = document.getElementById('tbl');
+
+function renderTable(){
+  const kw = q.trim().toLowerCase();
+  const hit = r => !kw || (r.store+r.city+r.supervisor).toLowerCase().includes(kw);
+
+  if(tab==='store'){
+    let rows = S.filter(hit).sort((a,b)=>(a[sortKey]>b[sortKey]?1:-1)*sortDir);
+    const tot = k => rows.reduce((s,r)=>s+r[k],0);
+    tb.innerHTML = `
+     <thead><tr>
+       <th>门店<span class="ar">${sortKey==='store'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th>城市<span class="ar">${sortKey==='city'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th>督导<span class="ar">${sortKey==='supervisor'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">第一二周<span class="ar">${sortKey==='w1'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">第三周<span class="ar">${sortKey==='w3'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">第四周<span class="ar">${sortKey==='w4'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">第五周<span class="ar">${sortKey==='w5'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">本月已冲锋<span class="ar">${sortKey==='month'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">今日已冲锋<span class="ar">${sortKey==='today'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th class="r">合计<span class="ar">${sortKey==='total'?(sortDir>0?'▲':'▼'):''}</span></th>
+       <th>状态</th>
+     </tr></thead><tbody>
+     ${rows.map(r=>`<tr>
+       <td class="nm">${esc(r.store)}</td>
+       <td>${esc(r.city)}</td>
+       <td>${esc(r.supervisor)}</td>
+       <td class="r money ${r.w1?'':'z'}">${r.w1?fmt(r.w1):'—'}</td>
+       <td class="r money ${r.w3?'':'z'}">${r.w3?fmt(r.w3):'—'}</td>
+       <td class="r money ${r.w4?'':'z'}">${r.w4?fmt(r.w4):'—'}</td>
+       <td class="r money ${r.w5?'':'z'}">${r.w5?fmt(r.w5):'—'}</td>
+       <td class="r money ${r.month?'':'z'}">${r.month?fmt(r.month):'—'}</td>
+       <td class="r money ${r.today?'':'z'}" style="${r.today?'color:var(--today)':''}">${r.today?fmt(r.today):'—'}</td>
+       <td class="r money">${fmt(r.total)}</td>
+       <td><span class="pill ${r.status==='本月+今日'?'a':(r.status==='仅今日'?'c':'b')}">${r.status}</span></td>
+     </tr>`).join('')}
+     <tr class="sumrow">
+       <td colspan="3">合计 ${rows.length} 家</td>
+       <td class="r">${fmt(tot('w1'))}</td><td class="r">${fmt(tot('w3'))}</td>
+       <td class="r">${fmt(tot('w4'))}</td><td class="r">${fmt(tot('w5'))}</td><td class="r">${fmt(tot('month'))}</td>
+       <td class="r" style="color:var(--today)">${fmt(tot('today'))}</td>
+       <td class="r">${fmt(tot('total'))}</td><td></td>
+     </tr></tbody>`;
+  } else {
+    const rows = T.filter(hit);
+    tb.innerHTML = `
+     <thead><tr><th>门店</th><th>城市</th><th>督导</th><th>平台</th><th class="r">实付金额</th></tr></thead>
+     <tbody>
+     ${rows.map(r=>`<tr>
+       <td class="nm">${esc(r.store)}</td><td>${esc(r.city)}</td>
+       <td>${esc(r.supervisor)}</td><td>${esc(r.platform)}</td>
+       <td class="r money" style="color:var(--today)">${fmt(r.amount)}</td>
+     </tr>`).join('')}
+     <tr class="sumrow"><td colspan="4">合计 ${rows.length} 笔</td>
+       <td class="r" style="color:var(--today)">${fmt(rows.reduce((s,r)=>s+r.amount,0))}</td></tr>
+     </tbody>`;
+  }
+  highlightCol();
+}
+
+function highlightCol(){
+  const map={store:1,city:2,supervisor:3,w1:4,w3:5,w4:6,w5:7,month:8,today:9,total:10};
+  document.querySelectorAll('#tbl th, #tbl td').forEach(t=>t.classList.remove('hl'));
+  if(tab!=='store') return;
+  const n=map[sortKey]; if(!n) return;
+  document.querySelectorAll(`#tbl th:nth-child(${n}), #tbl td:nth-child(${n})`).forEach(t=>t.classList.add('hl'));
+}
+
+function updateKpiHighlight(){
+  document.querySelectorAll('#kpis .kpi').forEach((c,i)=>{
+    const on = (view==='month' && i<2) || (view==='today' && i>=2);
+    c.classList.toggle('active', on);
+  });
+}
+
+tb.addEventListener('click', e=>{
+  const th = e.target.closest('th'); if(!th || !th.querySelector('.ar')) return;
+  const map = ['store','city','supervisor','w1','w3','w4','w5','month','today','total'];
+  const cells = [...th.parentNode.children];
+  const k = map[cells.indexOf(th)];
+  if(k===undefined) return;
+  if(sortKey===k) sortDir*=-1; else {sortKey=k; sortDir=-1;}
+  renderTable();
+});
+document.getElementById('tabs').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  tab = b.dataset.tab;
+  [...e.currentTarget.children].forEach(x=>x.classList.toggle('on', x===b));
+  renderTable();
+});
+document.getElementById('q').addEventListener('input', e=>{q=e.target.value; renderTable();});
+
+document.getElementById('viewSeg').addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  view = b.dataset.v;
+  [...e.currentTarget.children].forEach(x=>x.classList.toggle('on', x===b));
+  if(view==='month'){ sortKey='month'; sortDir=-1; }
+  else if(view==='today'){ sortKey='today'; sortDir=-1; }
+  else { sortKey='total'; sortDir=-1; }
+  renderRank();
+  updateKpiHighlight();
+  renderTable();
+});
+
+renderTable();
+</script>
+</body>
+</html>
