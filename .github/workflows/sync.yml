@@ -1,0 +1,53 @@
+name: 同步冲锋看板
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 恢复企微凭证
+        env:
+          WECOM_KEY: ${{ secrets.WECOM_ENCRYPTION_KEY }}
+          WECOM_CRED: ${{ secrets.WECOM_CREDENTIALS_ENC }}
+          WECOM_BOT: ${{ secrets.WECOM_BOT_ENC }}
+          WECOM_MCP: ${{ secrets.WECOM_MCP_CONFIG_ENC }}
+        run: |
+          mkdir -p "$HOME/.wecom-cli"
+          printf '%s' "$WECOM_KEY"  | base64 -d > "$HOME/.wecom-cli/.encryption_key"
+          printf '%s' "$WECOM_CRED" | base64 -d > "$HOME/.wecom-cli/credentials.enc"
+          printf '%s' "$WECOM_BOT"  | base64 -d > "$HOME/.wecom-cli/bot.enc"
+          printf '%s' "$WECOM_MCP"  | base64 -d > "$HOME/.wecom-cli/mcp_config.enc"
+          chmod 600 "$HOME/.wecom-cli"/*
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装 wecom-cli
+        run: npm install -g @wecom/cli
+
+      - name: 同步数据
+        run: python update_dashboard.py --input index.html --output index.html
+
+      - name: 提交并推送
+        run: |
+          git config user.name "sync-bot"
+          git config user.email "actions@users.noreply.github.com"
+          if git diff --quiet -- index.html; then
+            echo "无数据变化，跳过提交"
+          else
+            git add index.html
+            git commit -m "chore: 同步冲锋看板数据"
+            git push
+          fi
