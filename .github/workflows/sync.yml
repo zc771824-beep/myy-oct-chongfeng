@@ -19,12 +19,14 @@ jobs:
           WECOM_BOT: ${{ secrets.WECOM_BOT_ENC }}
           WECOM_MCP: ${{ secrets.WECOM_MCP_CONFIG_ENC }}
         run: |
-          mkdir -p "$HOME/.wecom-cli"
-          printf '%s' "$WECOM_KEY"  | base64 -d > "$HOME/.wecom-cli/.encryption_key"
-          printf '%s' "$WECOM_CRED" | base64 -d > "$HOME/.wecom-cli/credentials.enc"
-          printf '%s' "$WECOM_BOT"  | base64 -d > "$HOME/.wecom-cli/bot.enc"
-          printf '%s' "$WECOM_MCP"  | base64 -d > "$HOME/.wecom-cli/mcp_config.enc"
-          chmod 600 "$HOME/.wecom-cli"/*
+          mkdir -p "$HOME/.config/wecom" "$HOME/.wecom-cli"
+          for d in "$HOME/.config/wecom" "$HOME/.wecom-cli"; do
+            printf '%s' "$WECOM_KEY"  | base64 -d > "$d/.encryption_key"
+            printf '%s' "$WECOM_CRED" | base64 -d > "$d/credentials.enc"
+            printf '%s' "$WECOM_BOT"  | base64 -d > "$d/bot.enc"
+            printf '%s' "$WECOM_MCP"  | base64 -d > "$d/mcp_config.enc"
+            chmod 600 "$d"/.encryption_key "$d"/credentials.enc "$d"/bot.enc "$d"/mcp_config.enc
+          done
 
       - uses: actions/setup-python@v5
         with:
